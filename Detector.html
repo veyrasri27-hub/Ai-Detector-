@@ -1,30 +1,57 @@
-from transformers import AutoImageProcessor, AutoModelForImageClassification
-from PIL import Image
-import torch
-
-# Choose a strong, up-to-date model (2025-2026 era)
-# This one is ViT-based, high accuracy on deepfakes
-model_name = "prithivMLmods/Deep-Fake-Detector-v2-Model"  # Or try "prithivMLmods/deepfake-detector-model-v1" if you want SigLIP
-
-processor = AutoImageProcessor.from_pretrained(model_name)
-model = AutoModelForImageClassification.from_pretrained(model_name)
-
-# Change this to your test image path
-# Example: a real selfie vs. an AI-generated face (Midjourney/Flux/etc.)
-image_path = r"C:\Users\saich\Pictures\test_image.jpg"  # Use raw string r"" for Windows paths
-
-image = Image.open(image_path).convert("RGB")
-inputs = processor(images=image, return_tensors="pt")
-
-with torch.no_grad():
-    outputs = model(**inputs)
-    logits = outputs.logits
-    probabilities = torch.softmax(logits, dim=1)
-    predicted_idx = torch.argmax(probabilities, dim=1).item()
-
-# Most models label: 0 = Fake/Deepfake, 1 = Real (check model card on Hugging Face if unsure)
-labels = ["Fake / Deepfake", "Real"]
-print(f"Prediction: {labels[predicted_idx]}")
-print(f"Probabilities:")
-print(f"  Fake: {probabilities[0][0]:.2%}")
-print(f"  Real: {probabilities[0][1]:.2%}")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veera's Enhanced Deepfake Detector v2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #555;
+        }
+        p {
+            line-height: 1.6;
+        }
+        .instructions {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Veera's Enhanced Deepfake Detector v2</h1>
+        <p>Welcome to Veera's Enhanced Deepfake Detector, your go-to solution for detecting deepfake content. This tool leverages advanced AI models to deliver accurate results.</p>
+        <h2>How to Use</h2>
+        <div class="instructions">
+            <p>1. Upload the video or image you wish to analyze using the upload button.</p>
+            <p>2. Click on the 'Analyze' button to start the detection process.</p>
+            <p>3. Review the results displayed on the screen.</p>
+        </div>
+        <h2>About the Models and Features</h2>
+        <p>This detector utilizes cutting-edge deep learning models trained on large datasets of both real and fake media. The key features include:</p>
+        <ul>
+            <li>High accuracy in detecting manipulated content.</li>
+            <li>User-friendly interface for seamless experience.</li>
+            <li>Fast processing times for quick feedback.</li>
+        </ul>
+    </div>
+</body>
+</html>
